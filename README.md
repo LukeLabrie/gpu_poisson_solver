@@ -11,10 +11,10 @@ The driver executable can be called as follows
 `T_0`: Starting temeprature of inner points on the domain, in Kelvin. 
 
 
-output_type:
-    0 = No output
-    1 = Performance metrics printed as [N] [wall time] [data transfer time (s)] [memory (MB)] [bandwidth (data transfer, GB/s)] [bandwidth (no data transfer, GB/s)] [time spent in kernel (s, not always measured)] [bandwidth based on kernel time (s, not always measured)]
-    3 = Write binary dump (.bin)
+`output_type`:
+    0 = No output \
+    1 = Performance metrics printed as [N] [wall time] [data transfer time (s)] [memory (MB)] [bandwidth (data transfer, GB/s)] [bandwidth (no data transfer, GB/s)] [time spent in kernel (s, not always measured)] [bandwidth based on kernel time (s, not always measured)] \
+    3 = Write binary dump (.bin) \
     4 = Write .vtk file
 
     
