@@ -1,6 +1,8 @@
 The driver executable can be called as follows 
 
+```
 ./poisson_solver N K T_0 output_type [file_suffix] [threads]
+```
 
     N: Problem size. For single-GPU solvers, this needs to be a multiple of 16. For the dual-GPU CUDA solver, this needs to be a multiple of 32. 
     K: Number of iterations.
