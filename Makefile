@@ -1,49 +1,52 @@
-# Makefile
-#
 TARGET = poisson_solver
 
-SOURCES	= main.cu print.c alloc3d.c initialize.c alloc3d_device.c alloc3d_cuda.cu jacobi_cuda.cu
-OBJECTS	= print.o alloc3d.o initialize.o alloc3d_device.o alloc3d_cuda.o 
+# Directory paths
+SRCDIR = src
+INCDIR = include
+BINDIR = bin
+OBJDIR = obj
 
-MAIN = main.o
-OBJS = $(MAIN) jacobi_ps.o jacobi_offload.o jacobi_cuda.o
+# List of source files and object files
+SOURCES = $(SRCDIR)/main.cu $(SRCDIR)/print.c $(SRCDIR)/alloc3d.c $(SRCDIR)/initialize.c $(SRCDIR)/alloc3d_device.c $(SRCDIR)/alloc3d_cuda.cu $(SRCDIR)/jacobi_cuda.cu
+OBJECTS = $(OBJDIR)/print.o $(OBJDIR)/alloc3d.o $(OBJDIR)/initialize.o $(OBJDIR)/alloc3d_device.o $(OBJDIR)/alloc3d_cuda.o 
+
+MAIN = $(OBJDIR)/main.o
+OBJS = $(MAIN) $(OBJDIR)/jacobi_ps.o $(OBJDIR)/jacobi_offload.o $(OBJDIR)/jacobi_cuda.o
 
 # options and settings for the GCC compilers
-CC	= mpic++
-CXX	= nvc++
+CC = mpic++
+CXX = nvc++
 
-OPT	= -g -fast -Msafeptr -Minfo -mp=gpu -gpu=pinned -gpu=cc70 -gpu=lineinfo -mp=noautopar -cuda
+OPT = -g -fast -Msafeptr -Minfo -mp=gpu -gpu=pinned -gpu=cc70 -gpu=lineinfo -mp=noautopar -cuda
 #PIC   = -fpic -shared
-ISA	= 
-PARA	= -fopenmp
+ISA = 
+PARA = -fopenmp
 CUDA_PATH ?= /appl/cuda/12.1.0
-INC   = -I$(CUDA_PATH)/include -I/appl/nvhpc/2023_231/Linux_x86_64/23.1/examples/OpenMP/SDK/include -I$(MODULE_MPI_INCLUDE_DIR) -I/appl/nccl/2.17.1-1-cuda-12.1/include
-LIBS	= -lcuda -lnccl
+INC = -I$(CUDA_PATH)/include -I/appl/nvhpc/2023_231/Linux_x86_64/23.1/examples/OpenMP/SDK/include -I$(MODULE_MPI_INCLUDE_DIR) -I/appl/nccl/2.17.1-1-cuda-12.1/include -I$(INCDIR)
+LIBS = -lcuda -lnccl
 LDFLAGS = -lm -L/appl/nccl/2.17.1-1-cuda-12.1/lib -lnccl
 
-CXXFLAGS= $(OPT) $(PIC) $(INC) $(ISA) $(PARA) $(XOPT)
-CFLAGS= $(OPT) $(PIC) $(INC) $(ISA) $(PARA) $(XOPT)
+CXXFLAGS = $(OPT) $(PIC) $(INC) $(ISA) $(PARA) $(XOPT)
+CFLAGS = $(OPT) $(PIC) $(INC) $(ISA) $(PARA) $(XOPT)
 
-all: $(TARGET)
+all: $(BINDIR)/$(TARGET)
 
-$(TARGET): $(OBJECTS) $(OBJS)
+$(BINDIR)/$(TARGET): $(OBJECTS) $(OBJS)
 	$(CC) -o $@ $(CFLAGS) $(OBJS) $(OBJECTS) $(LDFLAGS)
 
-$(MAIN):
-	$(CC) -o $@ $(CFLAGS) -c main.cu alloc3d_cuda.o jacobi_cuda.o
+# Pattern rule for .c files
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-alloc3d_cuda.o: alloc3d_cuda.cu
-	$(CC) -o $@ $(CFLAGS) -c $<
-
-jacobi_cuda.o: jacobi_cuda.cu
-	$(CC) -o $@ $(CFLAGS) -c $<
+# Pattern rule for .cu files
+$(OBJDIR)/%.o: $(SRCDIR)/%.cu
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@/bin/rm -f core *.o *~
+	@/bin/rm -f $(OBJDIR)/*.o *~
 
 realclean: clean
-	@/bin/rm -f $(TARGET)
+	@/bin/rm -f $(BINDIR)/$(TARGET)
 
 # DO NOT DELETE
-main.o: main.cu print.h jacobi_offload.h initialize.h jacobi_cuda.hpp
-print.o: print.h
+main.o: $(SRCDIR)/main.cu $(INCDIR)/print.h $(INCDIR)/jacobi_offload.h $(INCDIR)/initialize

@@ -69,9 +69,9 @@ int main(int argc, char *argv[]) {
     
 
     // solve
-    if (method==1) jacobi_ps(U,V,F,iter_max,N,&t0,tolerance,&tot,threads);
-    else if (method==2) jacobi_offload_dynamic(U,V,F,iter_max,N,&t0,&t1,tolerance,&tot);
-    else if (method==3) jacobi_offload_split(U,V,F,iter_max,N,&t0,tolerance,&tot);
+    if (method==1) jacobi_ps(U,V,F,iter_max,N,&t0,&tot,threads);
+    else if (method==2) jacobi_offload_dynamic(U,V,F,iter_max,N,&t0,&t1,&tot);
+    else if (method==3) jacobi_offload_split(U,V,F,iter_max,N,&t0,&t1,tolerance,&tot);
 
     // dump  results if wanted 
     switch(output_type) {
