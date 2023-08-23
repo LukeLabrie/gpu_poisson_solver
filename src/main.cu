@@ -94,8 +94,6 @@ int main(int argc, char *argv[]) {
     else if (method==6) jacobi_cuda_split(U,V,F,iter_max,N,&t0,&t1,&kt);
     else if (method==7) jacobi_cuda_split_MPI(U,V,F,iter_max,N,&t0,&t1,argc,argv,output_filename,output_prefix,output_ext,output_suffix,output_type);
 
-    // debuggers
-    
     bool mpi_method = (method == 7 || method == 8);
 
     // dump  results if wanted 
