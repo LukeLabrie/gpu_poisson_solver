@@ -1,3 +1,9 @@
+# GPU Poisson Solver
+
+This solver solves the Poisson equation in three dimensions on a cubical domain for a specific set of initial conditions. Details on this specific problem and the implementation are discussed in the report PDF and below. 
+
+## Executable 
+
 The driver executable can be called as follows 
 
 ```
