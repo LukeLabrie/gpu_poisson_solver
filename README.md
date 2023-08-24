@@ -1,6 +1,28 @@
 # GPU Poisson Solver
 
-This solver solves the Poisson equation in three dimensions on a cubical domain for a specific set of initial conditions. A full writeup in available in the [report](report.pdf)
+This solver solves the Poisson equation in three dimensions on a cubical domain for a specific set of initial conditions. The purpose of the solver is to compare performance across different parallelization methods and includes parallel methods for:
+- CPU
+- Single-GPU via OpenMP
+- Dual-GPU via OpenMP
+- Single-GPU via CUDA
+- Dual-GPU via CUDA
+- Four-GPU (two nodes, each with two GPUs), via CUDA, OpenMPI, and NCCL 
+   
+A full writeup is available in the [report](report.pdf).
+
+## Requirements 
+
+The project is compiled with the `mpic++` compiler, an OpenMPI C++ wrapper compiler. The underlying compiler is set to `nvc++`, NVIDIA's compiler for their GPUS. This can be done by setting the environment variable `OMPI_CXX` to `nvc++` via
+
+```
+export OMPI_CXX=nvc++
+```
+
+Other requirements include:
+- CUDA
+- OpenMPI
+- OpenMP
+- NCCL 
 
 ## Executable 
 
