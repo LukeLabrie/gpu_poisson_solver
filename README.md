@@ -1,6 +1,30 @@
 # GPU Poisson Solver
 
-This solver solves the Poisson equation in three dimensions on a cubical domain for a specific set of initial conditions. The purpose of the solver is to compare performance across different parallelization methods and includes parallel methods for:
+## Background
+
+This solver solves the Poisson equation in three dimensions for a specific set of boundary conditions. The poisson equation can be expressed as 
+
+```math
+\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} + \frac{\partial^2 u}{\partial z^2} = -f(x,y,z), \quad (x,y,x) \in \Omega
+```
+
+Different methods will be compared for solvers operating on a cubical domain $\Omega$ defined as
+
+```math
+\Omega = \{(x, y, z) : |x| \leq 1, |y| \leq 1, |z| \leq 1\}    
+```
+
+with boundary conditions 
+
+```math
+\begin{align*}
+u(x, 1, z) &= 20, u(x, -1, z) = 0,  -1 \leq x, z \leq 1 \\
+u(1, y, z) &= u(-1, y, z) = 20,  -1 \leq y, z \leq 1 \\
+u(x, y, -1) &= u(x, y, 1) = 20,  -1 \leq x, y \leq 1.
+\end{align*}
+```
+
+The purpose of the solver is to compare performance across different parallelization methods and includes parallel methods for:
 - CPU
 - Single-GPU via OpenMP
 - Dual-GPU via OpenMP
