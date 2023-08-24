@@ -1,6 +1,6 @@
 # GPU Poisson Solver
 
-This solver solves the Poisson equation in three dimensions on a cubical domain for a specific set of initial conditions. Details on this specific problem and the implementation are discussed in the report PDF and below. 
+This solver solves the Poisson equation in three dimensions on a cubical domain for a specific set of initial conditions. A full writeup in available in the [report](report.pdf)
 
 ## Executable 
 
