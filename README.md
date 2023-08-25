@@ -2,19 +2,19 @@
 
 ## Background
 
-This solver solves the Poisson equation in three dimensions for a specific set of boundary conditions. The poisson equation can be expressed as 
+This solver solves the Poisson equation on a cubical domain, $\Omega$, for a specific set of boundary conditions. The poisson equation can be expressed as 
 
 ```math
 \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} + \frac{\partial^2 u}{\partial z^2} = -f(x,y,z), \quad (x,y,x) \in \Omega
 ```
 
-Different methods will be compared for solvers operating on a cubical domain $\Omega$ defined as
+with, for this problem, a boundary defined by 
 
 ```math
 \Omega = \{(x, y, z) : |x| \leq 1, |y| \leq 1, |z| \leq 1\}    
 ```
 
-with boundary conditions 
+and boundary conditions 
 
 ```math
 \begin{align*}
@@ -25,7 +25,7 @@ u(x, y, -1) &= u(x, y, 1) = 20,  -1 \leq x, y \leq 1.
 ```
 
 The purpose of the solver is to compare performance across different parallelization methods and includes parallel methods for:
-- CPU
+- CPU (parallel) 
 - Single-GPU via OpenMP
 - Dual-GPU via OpenMP
 - Single-GPU via CUDA
@@ -53,7 +53,7 @@ Other requirements include:
 The driver executable can be called as follows 
 
 ```
-./poisson_solver N K T_0 output_type [file_suffix] [threads]
+./poisson_solver N K T_0 output_type method [file_suffix] [threads]
 ```
 
 `N`: Problem size. For single-GPU solvers, this needs to be a multiple of 16. For the dual-GPU CUDA solver, this needs to be a multiple of 32. 
@@ -62,15 +62,25 @@ The driver executable can be called as follows
 
 `T_0`: Starting temeprature of inner points on the domain, in Kelvin. 
 
+`output_type`:
 
-`output_type`: \
-    0 = No output \
-    1 = Performance metrics printed as [N] [wall time] [data transfer time (s)] [memory (MB)] [bandwidth (data transfer, GB/s)] [bandwidth (no data transfer, GB/s)] [time spent in kernel (s, not always measured)] [bandwidth based on kernel time (s, not always measured)] \
-    3 = Write binary dump (.bin) \
-    4 = Write .vtk file
+- `0` = No output
+- `1` = Performance metrics printed as [N] [wall time] [data transfer time (s)] [memory (MB)] [bandwidth (data transfer, GB/s)] [bandwidth (no data transfer, GB/s)] [time spent in kernel (s, not always measured)] [bandwidth based on kernel time (s, not always measured)] 
+- `3` = Write binary dump (.bin) 
+- `4` = Write .vtk file
 
-    
+`method`:
+
+- `1` = CPU parallel solver. Number of threads can be specified with the `threads` argument
+- `2` = Single-GPU solver using OpenMP
+- `3` = Dual-GPU solver using OpenMP
+- `4` = Single-GPU solver using CUDA
+- `5` = Single-GPU solver using CUDA, improved memory access patterns
+- `6` = Dual-GPU solver using CUDA
+- `7` = Four-GPU solver using CUDA+NCCL+MPI. This solver assumes each available node has two GPUs. 
+
 `file_suffix`: Suffix to add to .vtk file
 
-
 `threads`: Threads for CPU versions
+
+
